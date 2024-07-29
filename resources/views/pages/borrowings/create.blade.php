@@ -87,21 +87,6 @@
                             </div>
                             <!-- hidden librarian_id -->
                             <input type="hidden" name="librarian_id" value="{{ Auth::id() }}">
-
-                            <div class="col-12 col-lg-6">
-<div class="form-group">
-    <label>Rentang Tanggal</label>
-    <div class="input-group">
-        <div class="input-group-prepend">
-            <span class="input-group-text">
-                <i class="far fa-calendar-alt"></i>
-            </span>
-        </div>
-        <input type="text" class="form-control float-right" id="daterangepicker">
-    </div>
-</div>
-                            </div>
-
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -116,17 +101,7 @@
 </div>
 @endsection
 
-
-@section('css')
-<link rel="stylesheet" href="{{ asset('AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.css') }}">
-<link rel="stylesheet" href="{{ asset('AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-@endsection
-
 @section('js')
-<script src="{{ asset('AdminLTE-3.2.0/plugins/moment/moment.min.js') }}"></script>
-<script src="{{ asset('AdminLTE-3.2.0/plugins/daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ asset('AdminLTE-3.2.0/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
-
 <script>
 function updateRentalPrice() {
     const bookSelect = document.getElementById('bookId');
@@ -135,18 +110,5 @@ function updateRentalPrice() {
     const rentalPrice = selectedOption.getAttribute('data-rental-price');
     rentalPriceInput.value = rentalPrice;
 }
-</script>
-
-<script>
-//Date picker
-$('#daterangepicker').daterangepicker({
-    // Enable the time picker
-    timePicker: true,
-    // Set the time picker to increment by 30 minutes
-    timePickerIncrement: 30,
-    locale: {
-        format: 'MM/DD/YYYY'
-    }
-})
 </script>
 @endsection
