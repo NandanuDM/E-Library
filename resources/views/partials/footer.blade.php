@@ -1,5 +1,6 @@
-<footer class="footer bg-light p-3 mt-4">
-    <div class="container">
-        <p>&copy; 2024 e-library. All rights reserved.</p>
+<footer class="main-footer">
+    <strong>&copy; 2024 <a href="#">e-Library</a>.</strong> All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+        <b>Version</b> 1.0.0 (Beta)
     </div>
 </footer>

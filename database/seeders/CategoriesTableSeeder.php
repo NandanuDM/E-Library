@@ -14,9 +14,12 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
-        Category::create(['name' => 'Fiction']);
-        Category::create(['name' => 'Non-Fiction']);
-        Category::create(['name' => 'Science']);
-        Category::create(['name' => 'Biography']);
+        Category::create(['name' => 'Fiksi']);
+        Category::create(['name' => 'Non-Fiksi']);
+        Category::create(['name' => 'Sains']);
+        Category::create(['name' => 'Biografi']);
+        Category::create(['name' => 'Teknologi']);
+        Category::create(['name' => 'Sosial']);
+        Category::create(['name' => 'Sejarah']);
     }
 }

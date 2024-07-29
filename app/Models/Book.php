@@ -3,12 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
+    use SoftDeletes; // Using SoftDeletes trait
+
     protected $fillable = [
-        'title', 'author', 'published_year', 'category_id', 'publisher_id', 'cover_image', 'stock', 'rental_price',
+        'title', 'isbn', 'author', 'published_year', 'category_id', 'publisher_id', 'cover_image', 'stock', 'rental_price',
     ];
+
+    protected $dates = ['deleted_at']; // Defining deleted_at column for soft deletes
 
     /**
      * Get the category that owns the book.

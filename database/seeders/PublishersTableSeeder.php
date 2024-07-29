@@ -14,8 +14,26 @@ class PublishersTableSeeder extends Seeder
      */
     public function run()
     {
-        Publisher::create(['name' => 'Publisher One']);
-        Publisher::create(['name' => 'Publisher Two']);
-        Publisher::create(['name' => 'Publisher Three']);
+        $publishers = [
+            ['name' => 'Gramedia Pustaka Utama'],
+            ['name' => 'Penguin Random House'],
+            ['name' => 'HarperCollins'],
+            ['name' => 'Simon & Schuster'],
+            ['name' => 'Hachette Book Group'],
+            ['name' => 'Macmillan Publishers'],
+            ['name' => 'Pearson'],
+            ['name' => 'Scholastic'],
+            ['name' => 'McGraw-Hill Education'],
+            ['name' => 'Houghton Mifflin Harcourt'],
+            ['name' => 'Wiley'],
+            ['name' => 'Bentang Pustaka'],
+            ['name' => 'Republika Penerbit'],
+            ['name' => 'Mizan'],
+            ['name' => 'GagasMedia']
+        ];
+
+        foreach ($publishers as $publisher) {
+            Publisher::create($publisher);
+        }
     }
 }
