@@ -103,7 +103,6 @@
                 <li class="nav-header">Pengaturan</li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                    <a href="{{ route('borrowings.index') }}" class="nav-link {{ request()->routeIs('borrowings.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Akun
