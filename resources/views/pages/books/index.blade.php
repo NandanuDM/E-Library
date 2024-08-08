@@ -49,34 +49,34 @@
                         </thead>
                         <tbody>
                             @foreach ($books as $book)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $book->title }}</td>
-                                    <td>{{ $book->isbn }}</td>
-                                    <td>{{ $book->author }}</td>
-                                    <td>{{ $book->published_year }}</td>
-                                    <td>{{ $book->category->name }}</td>
-                                    <td>{{ $book->publisher->name }}</td>
-                                    <td>{{ $book->stock }}</td>
-                                    <td>{{ formatRp($book->rental_price) }}</td>
-                                    <td>
-                                        <div class="btn-group dropleft">
-                                            <button type="button" class="btn btn-secondary btn-sm">Pilih</button>
-                                            <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <span class="sr-only">Toggle Dropdown</span>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-left">
-                                                <a class="dropdown-item" href="{{ route('books.show', $book->id) }}">Detail</a>
-                                                <a class="dropdown-item" href="{{ route('books.edit', $book->id) }}">Edit</a>
-                                                <a class="dropdown-item" href="#" onclick="confirmDelete({{ $book->id }}, '{{ $book->title }}')">Hapus</a>
-                                            </div>
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $book->title }}</td>
+                                <td>{{ $book->isbn }}</td>
+                                <td>{{ $book->author }}</td>
+                                <td>{{ $book->published_year }}</td>
+                                <td>{{ $book->category->name }}</td>
+                                <td>{{ $book->publisher->name }}</td>
+                                <td>{{ $book->stock }}</td>
+                                <td>{{ formatRp($book->rental_price) }}</td>
+                                <td>
+                                    <div class="btn-group dropleft">
+                                        <button type="button" class="btn btn-secondary btn-sm">Pilih</button>
+                                        <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-left">
+                                            <a class="dropdown-item" href="{{ route('books.show', $book->id) }}">Detail</a>
+                                            <a class="dropdown-item" href="{{ route('books.edit', $book->id) }}">Edit</a>
+                                            <a class="dropdown-item" href="#" onclick="confirmDelete('{{ $book->id }}', '{{ $book->title }}')">Hapus</a>
                                         </div>
-                                        <form id="delete-form-{{ $book->id }}" action="{{ route('books.destroy', $book->id) }}" method="POST" style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </td>
-                                </tr>
+                                    </div>
+                                    <form id="delete-form-{{ $book->id }}" action="{{ route('books.destroy', $book->id) }}" method="POST" style="display: none;">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -102,40 +102,41 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-$(document).ready(function() {
-    $('#booksTable').DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+    $(document).ready(function() {
+        $('#booksTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
     });
-});
 
-function confirmDelete(bookId, bookTitle) {
-    Swal.fire({
-        title: 'Apakah Anda yakin?',
-        text: "Setelah dihapus, Anda tidak dapat memulihkan buku \"" + bookTitle + "\"!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, hapus!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            document.getElementById('delete-form-' + bookId).submit();
-        }
-    })
-}
+    function confirmDelete(bookId, bookTitle) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Setelah dihapus, Anda tidak dapat memulihkan buku \"" + bookTitle + "\"!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + bookId).submit();
+            }
+        })
+    }
 
-@if(session('success'))
+    @if(session('success'))
     $(document).Toasts('create', {
         class: 'bg-success',
         title: 'Berhasil',
         autohide: true, // Enable auto hide
-        delay: 3000,    // Auto close after 3 seconds
-        body: '{{ session('success') }}'
+        delay: 3000, // Auto close after 3 seconds
+        body: '{{ session('
+        success ') }}'
     });
-@endif
+    @endif
 </script>
 @endsection

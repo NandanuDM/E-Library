@@ -24,6 +24,7 @@ class CreateBorrowingsTable extends Migration
             $table->integer('rental_price');
             $table->integer('late_fee')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             // Define foreign keys
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');

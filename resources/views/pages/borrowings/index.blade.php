@@ -48,31 +48,31 @@
                         </thead>
                         <tbody>
                             @foreach ($borrowings as $borrowing)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $borrowing->member->full_name }}</td>
-                                    <td>{{ $borrowing->book->title }}</td>
-                                    <td>{{ $borrowing->formatted_borrow_date }}</td>
-                                    <td>{{ $borrowing->formatted_return_date }}</td>
-                                    <td>{{ ucfirst($borrowing->status) }}</td>
-                                    <td>
-                                        @if ($borrowing->is_late)
-                                            <span class="badge badge-danger">Terlambat {{ $borrowing->late_days }} hari</span>
-                                        @else
-                                            <span class="badge badge-success">Tidak terlambat</span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $borrowing->formatted_late_fee }}</td>
-                                    <td>
-                                        <a href="{{ route('borrowings.show', $borrowing->id) }}" class="btn btn-info btn-sm">Detail</a>
-                                        <a href="{{ route('borrowings.edit', $borrowing->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                        <form action="{{ route('borrowings.destroy', $borrowing->id) }}" method="POST" style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this borrowing?')">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $borrowing->member->full_name }}</td>
+                                <td>{{ $borrowing->book->title }}</td>
+                                <td>{{ $borrowing->formatted_borrow_date }}</td>
+                                <td>{{ $borrowing->formatted_return_date }}</td>
+                                <td>{{ ucfirst($borrowing->status) }}</td>
+                                <td>
+                                    @if ($borrowing->is_late)
+                                    <span class="badge badge-danger">Terlambat {{ $borrowing->late_days }} hari</span>
+                                    @else
+                                    <span class="badge badge-success">Tidak terlambat</span>
+                                    @endif
+                                </td>
+                                <td>{{ $borrowing->formatted_late_fee }}</td>
+                                <td>
+                                    <a href="{{ route('borrowings.show', $borrowing->id) }}" class="btn btn-info btn-sm">Detail</a>
+                                    <a href="{{ route('borrowings.edit', $borrowing->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('borrowings.destroy', $borrowing->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this borrowing?')">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>

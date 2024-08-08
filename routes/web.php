@@ -38,6 +38,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Member routes
+    Route::get('members/export', [MemberController::class, 'export'])->name('export');
     Route::resource('members', MemberController::class);
 
     // Book routes including soft deletes

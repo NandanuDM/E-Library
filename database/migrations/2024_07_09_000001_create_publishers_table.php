@@ -17,6 +17,7 @@ class CreatePublishersTable extends Migration
             $table->id(); // Primary key
             $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
             $table->engine = 'InnoDB'; // Ensure InnoDB engine
         });
     }

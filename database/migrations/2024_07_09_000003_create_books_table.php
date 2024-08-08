@@ -17,7 +17,7 @@ class CreateBooksTable extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->string('title');
-            $table->string('isbn');
+            // $table->string('isbn');
             $table->string('author');
             $table->integer('published_year');
             $table->unsignedBigInteger('category_id')->nullable(); // Foreign key to categories
@@ -32,7 +32,7 @@ class CreateBooksTable extends Migration
             // Define foreign keys
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
             $table->foreign('publisher_id')->references('id')->on('publishers')->onDelete('set null');
-            
+
             $table->engine = 'InnoDB'; // Ensure InnoDB engine
         });
     }

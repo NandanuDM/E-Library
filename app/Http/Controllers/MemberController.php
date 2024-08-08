@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMemberRequest;
+use App\Http\Requests\UpdateMemberRequest;
 use App\Models\Member;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Storage;
 
 class MemberController extends Controller
 {
@@ -12,10 +16,50 @@ class MemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+            $data = Member::query();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->make();
+        }
         $members = Member::all();
-        return view('pages.members.index', compact('members'));
+        return view('pages.members.index');
+    }
+
+    public function export()
+    {
+        $fileName = "Anggota Perpustakaan.xls";
+        $excelData[] = array(
+            'No',
+            'Nama Lengkap',
+            'Alamat',
+            'Telepon',
+            'Email',
+            'Tipe Anggota'
+        );
+
+        $data = Member::all()->sortBy('full_name');
+        $i = 1;
+        if (!$data == "") {
+            foreach ($data as $row) {
+                $excelData[] = array(
+                    $i,
+                    $row->full_name,
+                    $row->address,
+                    $row->phone,
+                    $row->email,
+                    $row->type
+                );
+                $i++;
+            }
+        } else {
+            $excelData[] = 'Data tidak tersedia';
+        }
+
+        $xlsx = PhpXlsxGenerator::fromArray($excelData);
+        $xlsx->downloadAs($fileName);
     }
 
     /**
@@ -34,33 +78,20 @@ class MemberController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMemberRequest $request)
     {
-        $request->validate([
-            'full_name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'phone' => 'required|string|max:15|unique:members,phone',
-            'email' => 'required|string|email|max:255',
-            'type' => 'required',
-        ], [
-            'full_name.required' => 'Nama lengkap wajib diisi',
-            'full_name.string' => 'Nama lengkap harus berupa teks',
-            'full_name.max' => 'Nama lengkap maksimal 255 karakter',
-            'address.required' => 'Alamat wajib diisi',
-            'address.string' => 'Alamat harus berupa teks',
-            'address.max' => 'Alamat maksimal 255 karakter',
-            'phone.required' => 'Telepon wajib diisi',
-            'phone.string' => 'Telepon harus berupa teks',
-            'phone.max' => 'Telepon maksimal 15 karakter',
-            'phone.unique' => 'Nomor telepon sudah terdaftar',
-            'email.required' => 'Email wajib diisi',
-            'email.string' => 'Email harus berupa teks',
-            'email.email' => 'Format email tidak valid',
-            'email.max' => 'Email maksimal 255 karakter',
-            'type.required' => 'Tipe anggota wajib diisi',
-        ]);
+        $validatedData = $request->validated();
 
-        Member::create($request->all());
+        // Handle file upload
+        if ($request->hasFile('photo')) {
+            // Store the file and get the path
+            $path = $request->file('photo')->store('members', 'public');
+
+            // Save the path to the validated data
+            $validatedData['photo'] = $path;
+        }
+
+        Member::create($validatedData);
 
         return redirect()->route('members.index')->with('success', 'Anggota berhasil ditambahkan.');
     }
@@ -94,31 +125,28 @@ class MemberController extends Controller
      * @param  \App\Models\Member  $member
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Member $member)
+    public function update(UpdateMemberRequest $request, $id)
     {
-        $request->validate([
-            'full_name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'phone' => 'required|string|max:15|unique:members,phone,' . $member->id,
-            'email' => 'required|string|email|max:255',
-        ], [
-            'full_name.required' => 'Nama lengkap wajib diisi',
-            'full_name.string' => 'Nama lengkap harus berupa teks',
-            'full_name.max' => 'Nama lengkap maksimal 255 karakter',
-            'address.required' => 'Alamat wajib diisi',
-            'address.string' => 'Alamat harus berupa teks',
-            'address.max' => 'Alamat maksimal 255 karakter',
-            'phone.required' => 'Telepon wajib diisi',
-            'phone.string' => 'Telepon harus berupa teks',
-            'phone.max' => 'Telepon maksimal 15 karakter',
-            'phone.unique' => 'Nomor telepon sudah terdaftar',
-            'email.required' => 'Email wajib diisi',
-            'email.string' => 'Email harus berupa teks',
-            'email.email' => 'Format email tidak valid',
-            'email.max' => 'Email maksimal 255 karakter',
-        ]);
+        $member = Member::findOrFail($id);
+        $validatedData = $request->validated();
+        // Handle file upload
+        if ($request->hasFile('photo')) {
+            // Delete the old cover image if it exists
+            if ($member->photo) {
+                Storage::disk('public')->delete($member->photo);
+            }
 
-        $member->update($request->all());
+            // Store the new file and get the path
+            $path = $request->file('photo')->store('members', 'public');
+
+            // Save the path to the validated data
+            $validatedData['photo'] = $path;
+        } else {
+            // If no new file is uploaded, keep the old cover image
+            unset($validatedData['photo']);
+        }
+
+        $member->update($validatedData);
 
         return redirect()->route('members.index')->with('success', 'Anggota berhasil diperbarui.');
     }
@@ -131,8 +159,12 @@ class MemberController extends Controller
      */
     public function destroy(Member $member)
     {
+        if ($member->photo) {
+            // Delete the cover image from storage
+            Storage::disk('public')->delete($member->photo);
+        }
         $member->delete();
 
-        return redirect()->route('members.index')->with('success', 'Member deleted successfully.');
+        return redirect()->route('members.index')->with('success', 'Anggota berhasil dihapus.');
     }
 }
