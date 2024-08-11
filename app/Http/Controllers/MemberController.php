@@ -24,7 +24,6 @@ class MemberController extends Controller
                 ->addIndexColumn()
                 ->make();
         }
-        $members = Member::all();
         return view('pages.members.index');
     }
 

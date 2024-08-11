@@ -34,14 +34,14 @@
                 {{-- Roles --}}
                 <li class="nav-header">Peran</li>
                 @if (Auth::user()->role === 'admin')
-                    <li class="nav-item">
-                        <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-user-friends"></i>
-                            <p>
-                                Pengguna
-                            </p>
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user-friends"></i>
+                        <p>
+                            Pengguna
+                        </p>
+                    </a>
+                </li>
                 @endif
 
                 <li class="nav-item">
@@ -64,7 +64,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('categories.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-list"></i>
                         <p>
                             Kategori
@@ -72,7 +72,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('publishers.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-print"></i>
                         <p>
                             Penerbit
@@ -98,7 +98,7 @@
                         </p>
                     </a>
                 </li>
-                
+
                 {{-- Settings --}}
                 <li class="nav-header">Pengaturan</li>
                 <li class="nav-item">

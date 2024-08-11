@@ -8,6 +8,7 @@ use App\Models\Publisher;
 
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+use Yajra\DataTables\Facades\DataTables;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -15,13 +16,31 @@ use Illuminate\Support\Facades\Storage;
 class BookController extends Controller
 {
     // Display a listing of the books
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::with('category', 'publisher')
-            ->orderBy('title')
-            ->get();
+        if ($request->ajax()) {
+            $data = Book::with(
+                [
+                    'category'  => function ($query) {
+                        $query->withTrashed();
+                    },
+                    'publisher'  => function ($query) {
+                        $query->withTrashed();
+                    }
+                ]
+            );
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->make();
+        }
+        // $books = Book::with(['category'  => function ($query) {
+        //     $query->withTrashed();
+        // }, 'publisher'  => function ($query) {
+        //     $query->withTrashed();
+        // }])->orderBy('title')
+        //     ->get();
 
-        return view('pages.books.index', compact('books'));
+        return view('pages.books.index');
     }
 
     // Show the form for creating a new book

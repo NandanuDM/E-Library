@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Borrowing;
 use App\Models\Member;
 use App\Models\Book;
+use Yajra\DataTables\Facades\DataTables;
 
 use Carbon\Carbon;
 
@@ -17,46 +18,59 @@ class BorrowingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $borrowings = Borrowing::with('member', 'book')
-            ->orderBy('borrow_date', 'desc')
-            ->get();
 
-        foreach ($borrowings as $borrowing) {
-            $borrowDate = Carbon::parse($borrowing->borrow_date);
-            $dueDate = $borrowDate->copy()->addDays(7);
-            $returnDate = $borrowing->return_date ? Carbon::parse($borrowing->return_date) : Carbon::now();
-            $lateDays = 0;
-            $isLate = false;
+        if ($request->ajax()) {
+            $borrowings = Borrowing::with([
+                'member' => function ($query) {
+                    $query->withTrashed();
+                },
+                'book' => function ($query) {
+                    $query->withTrashed();
+                }
+            ])
+                ->orderBy('borrow_date', 'desc')
+                ->get();
 
-            if ($returnDate->gt($dueDate)) {
-                $lateDays = $returnDate->diffInDays($dueDate, false);
-                $isLate = true;
-            } elseif ($borrowing->return_date == null && Carbon::now()->gt($dueDate)) {
-                $lateDays = Carbon::now()->diffInDays($dueDate, false);
-                $isLate = true;
+            foreach ($borrowings as $borrowing) {
+                $borrowDate = Carbon::parse($borrowing->borrow_date);
+                $dueDate = $borrowDate->copy()->addDays(7);
+                $returnDate = $borrowing->return_date ? Carbon::parse($borrowing->return_date) : Carbon::now();
+                $lateDays = 0;
+                $isLate = false;
+
+                if ($returnDate->gt($dueDate)) {
+                    $lateDays = $returnDate->diffInDays($dueDate, false);
+                    $isLate = true;
+                } elseif ($borrowing->return_date == null && Carbon::now()->gt($dueDate)) {
+                    $lateDays = Carbon::now()->diffInDays($dueDate, false);
+                    $isLate = true;
+                }
+
+                // Ensure lateDays is not negative
+                $lateDays = abs($lateDays);
+
+                // Calculate late fee
+                $lateFee = $lateDays * 1000;
+
+                $borrowing->late_days = $lateDays;
+                $borrowing->late_fee = $lateFee;
+                $borrowing->is_late = $isLate;
+
+                // Format late fee using helper function
+                $borrowing->formatted_late_fee = formatRp($lateFee);
+                // Format borrow date using helper function
+                $borrowing->formatted_borrow_date = formatDate($borrowing->borrow_date);
+                // Format return date using helper function
+                $borrowing->formatted_return_date = $borrowing->return_date ? formatDate($borrowing->return_date) : '-';
             }
-
-            // Ensure lateDays is not negative
-            $lateDays = abs($lateDays);
-
-            // Calculate late fee
-            $lateFee = $lateDays * 1000;
-
-            $borrowing->late_days = $lateDays;
-            $borrowing->late_fee = $lateFee;
-            $borrowing->is_late = $isLate;
-
-            // Format late fee using helper function
-            $borrowing->formatted_late_fee = formatRp($lateFee);
-            // Format borrow date using helper function
-            $borrowing->formatted_borrow_date = formatDate($borrowing->borrow_date);
-            // Format return date using helper function
-            $borrowing->formatted_return_date = $borrowing->return_date ? formatDate($borrowing->return_date) : '-';
+            return DataTables::of($borrowings)
+                ->addIndexColumn()
+                ->make();
         }
 
-        return view('pages.borrowings.index', compact('borrowings'));
+        return view('pages.borrowings.index');
     }
 
     /**
@@ -97,7 +111,7 @@ class BorrowingController extends Controller
             'librarian_id.required' => 'Pustakawan wajib dipilih',
             'librarian_id.exists' => 'Pustakawan tidak valid',
         ]);
-        
+
         // Decreasing book stock
         $book = Book::find($request->book_id);
 

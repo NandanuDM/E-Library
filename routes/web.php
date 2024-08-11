@@ -9,7 +9,9 @@ use App\Http\Controllers\{
     DashboardController,
     HomeController,
     MemberController,
-    UserController
+    UserController,
+    CategoryController,
+    PublisherController
 };
 
 /*
@@ -51,6 +53,12 @@ Route::middleware('auth')->group(function () {
 
     // Borrowing routes
     Route::resource('borrowings', BorrowingController::class);
+
+    // Category routes
+    Route::resource('categories', CategoryController::class);
+
+    // Publisher routes
+    Route::resource('publishers', PublisherController::class);
 
     // User routes protected with role middleware
     Route::resource('users', UserController::class)->middleware('role:admin');

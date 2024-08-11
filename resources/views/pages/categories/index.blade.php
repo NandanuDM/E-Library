@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Anggota')
+@section('title', 'Daftar Kategori')
 
 @section('page-header')
 <div class="row">
@@ -9,11 +9,11 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Daftar Anggota</h1>
+                        <h1>Daftar Kategori</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><i class="fas fa-users mr-1"></i> Anggota</li>
+                            <li class="breadcrumb-item active"><i class="fas fa-users mr-1"></i> Kategori</li>
                         </ol>
                     </div>
                 </div>
@@ -29,21 +29,27 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('members.create') }}" class="btn btn-primary float-left"><i class="fas fa-plus mr-1"></i>Tambah Anggota</a>
-                    <a href="{{ route('export') }}" class="btn btn-success float-right"><i class="fas fa-light fa-file-export"></i></i> Export Excel</a>
+                    <a class="btn btn-primary float-left" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus mr-1"></i>Tambah kategeori</a>
                 </div>
                 <div class="card-body">
-                    <table id="membersTable" class="table table-bordered table-striped dataTable dtr-inline">
+                    <!-- validation error handler -->
+                    @if ($errors->any())
+                    <div class="alert alert-secondary alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Terdapat input yang tidak valid!</h5>
+                        <ul class="mb-0 px-3">
+                            @foreach ($errors->all() as $error)
+                            <li><small>{{ $error }}</small></li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                    <table id="categoriesTable" class="table table-bordered table-striped dataTable dtr-inline">
                         <thead style="background-color: cyan;">
                             <tr>
                                 <th>#</th>
-                                <th>Foto</th>
-                                <th>Nama Lengkap</th>
-                                <th>Alamat</th>
-                                <th>Telepon</th>
-                                <th>Email</th>
-                                <th>Tipe Anggota</th>
-                                <th style="width: 20%;">Aksi</th>
+                                <th>Nama Kategori</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                     </table>
@@ -52,6 +58,8 @@
         </div>
     </div>
 </div>
+@include('pages.categories.modal_create');
+@include('pages.categories.modal_edit');
 @endsection
 
 @section('css')
@@ -69,13 +77,24 @@
 <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
+    function onEdit(action, name) {
+        console.log(action);
+        $("#editName").val(name);
+        $("#editAction").val(action);
+    };
+
+    function get_action(form) {
+        var action = $("#editAction").val();
+        console.log("action = " + action);
+        form.action = action;
+    }
     $(document).ready(function() {
-        $('#membersTable').DataTable({
-            ajax: " {{ route('members.index') }}",
+        $('#categoriesTable').DataTable({
+            ajax: " {{ route('categories.index') }}",
             processing: true,
             serverSide: true,
             order: [
-                [2, 'asc']
+                [1, 'asc']
             ],
             columns: [{
                     data: 'DT_RowIndex',
@@ -84,62 +103,32 @@
                     width: '5%'
                 },
                 {
-                    data: "photo",
-                    render: function(data) {
-                        if (FileExists('storage/' + data)) {
-                            return '<img src="storage/' + data + '" width="80px height="80px">'
-                        } else {
-                            return `<img src="{{ asset('storage/members/defaultPhoto.png') }}" width="80px" height="80px" />`;
-                        }
-                    }
-                },
-                {
-                    data: 'full_name',
-                },
-                {
-                    data: 'address',
-                },
-                {
-                    data: 'phone',
-                },
-                {
-                    data: 'email',
-                },
-                {
-                    data: 'type',
+                    data: "name",
                 },
                 {
                     data: null,
                     render: function(data, type, row, meta) {
                         console.log("data = " + row.id);
-                        var show = "<a href=\"/members/" + row.id + "\" class=\"btn btn-info btn-sm mr-1\"> Detail </a>";
-                        var edit = "<a href = \"/members/" + row.id + "/edit\" class = \"btn btn-warning btn-sm mr-1\" > Edit </a>";
-                        var form = "<form id=\"deleteForm-" + row.id + "\" action = \"/members/" + row.id + "\" method = \"POST\" style = \"display:inline;\" > <input type=\"hidden\" name=\"_token\" value=\" {{csrf_token()}} \"> <input type=\"hidden\"name=\"_method\" value=\"delete\" /> </form>";
-                        var destroy = "<button type = \"button\" id=\"n-" + meta.row + "\" class = \"deletebtn btn-danger btn-sm\" > Delete </button> ";
-                        var allButton = show + edit + destroy + form;
+                        var edit = "<a data-toggle=\"modal\" data-target=\"#editModal\" class = \"btn btn-warning btn-sm mr-2\" onclick=\"onEdit('/categories/" + row.id + "', '" + row.name + "')\"> Edit </a>";
+                        var destroy = "<button type = \"button\" id=\"n-" + meta.row + "\" class = \"deletebtn btn btn-danger btn-sm\" > Delete </button> ";
+                        var form = "<form id=\"deleteForm-" + row.id + "\" action = \"/categories/" + row.id + "\" method = \"POST\" style = \"display:inline;\" > <input type=\"hidden\" name=\"_token\" value=\" {{csrf_token()}} \"> <input type=\"hidden\"name=\"_method\" value=\"delete\" /> </form>";
+                        var allButton = edit + destroy + form;
                         return allButton;
                     }
                 }
             ]
         });
 
-        function FileExists(link) {
-            var http = new XMLHttpRequest();
-            http.open('HEAD', link, false);
-            http.send();
-            return http.status != 404;
-        }
-
-        $('#membersTable tbody').on('click', '.deletebtn', function() {
+        $('#categoriesTable tbody').on('click', '.deletebtn', function() {
             var id = $(this).attr("id").match(/\d+/)[0];
-            var data = $('#membersTable').DataTable().row(id).data();
-            confirmDelete(data['id'], data['full_name']);
+            var data = $('#categoriesTable').DataTable().row(id).data();
+            confirmDelete(data['id'], data['name']);
         });
 
         function confirmDelete(memberId, memberName) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
-                text: "Setelah dihapus, Anda tidak dapat memulihkan anggota \"" + memberName + "\"!",
+                text: "Setelah dihapus, Anda tidak dapat memulihkan kategori \"" + memberName + "\"!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

@@ -33,7 +33,7 @@
                 </div>
                 <div class="card-body">
                     <table table id="booksTable" class="table table-bordered table-striped dataTable dtr-inline">
-                        <thead>
+                        <thead style="background-color: cyan;">
                             <tr>
                                 <th>#</th>
                                 <th>Judul</th>
@@ -47,38 +47,6 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($books as $book)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $book->title }}</td>
-                                <td>{{ $book->isbn }}</td>
-                                <td>{{ $book->author }}</td>
-                                <td>{{ $book->published_year }}</td>
-                                <td>{{ $book->category->name }}</td>
-                                <td>{{ $book->publisher->name }}</td>
-                                <td>{{ $book->stock }}</td>
-                                <td>{{ formatRp($book->rental_price) }}</td>
-                                <td>
-                                    <div class="btn-group dropleft">
-                                        <button type="button" class="btn btn-secondary btn-sm">Pilih</button>
-                                        <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span class="sr-only">Toggle Dropdown</span>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-left">
-                                            <a class="dropdown-item" href="{{ route('books.show', $book->id) }}">Detail</a>
-                                            <a class="dropdown-item" href="{{ route('books.edit', $book->id) }}">Edit</a>
-                                            <a class="dropdown-item" href="#" onclick="confirmDelete('{{ $book->id }}', '{{ $book->title }}')">Hapus</a>
-                                        </div>
-                                    </div>
-                                    <form id="delete-form-{{ $book->id }}" action="{{ route('books.destroy', $book->id) }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
                     </table>
                 </div>
             </div>
@@ -102,15 +70,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    $(document).ready(function() {
-        $('#booksTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-    });
-
     function confirmDelete(bookId, bookTitle) {
         Swal.fire({
             title: 'Apakah Anda yakin?',
@@ -127,6 +86,68 @@
             }
         })
     }
+    $(document).ready(function() {
+        $('#booksTable').DataTable({
+            // dom: 'Bfrtip',
+            // buttons: [
+            //     'copy', 'csv', 'excel', 'pdf', 'print'
+            // ],
+            ajax: " {{ route('books.index') }}",
+            processing: true,
+            serverSide: true,
+            order: [
+                [1, 'asc']
+            ],
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false,
+                    width: '5%'
+                },
+                {
+                    data: "title"
+                },
+                {
+                    data: "isbn"
+                },
+                {
+                    data: "author"
+                },
+                {
+                    data: "published_year"
+                },
+                {
+                    data: "category.name"
+                },
+                {
+                    data: "publisher.name"
+                },
+                {
+                    data: "stock"
+                },
+                {
+                    data: "rental_price",
+                    render: function(data, type, row, meta) {
+                        return row.rental_price.toLocaleString('id-ID', {
+                            style: 'currency',
+                            currency: 'IDR',
+                        })
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, row, meta) {
+                        console.log("data = " + row.id);
+                        var dropdown = "<div class=\"btn-group dropleft\"> <button type = \"button\" class=\"btn btn-secondary btn-sm\">Pilih</button> <button type = \"button\" class=\"btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"> <span class = \"sr-only\">Toggle Dropdown</span> </button>";
+                        var buttons = "<div class=\"dropdown-menu dropdown-menu-left\"> <a class = \"dropdown-item\" href=\"/books/" + row.id + "\">Detail</a> <a class = \"dropdown-item\" href=\"/books/" + row.id + "/edit\">Edit</a> <a class = \"dropdown-item\" href=\"#\" onclick=\"confirmDelete('" + row.id + "', '" + row.title + "' )\">Hapus</a> </div> </div>";
+                        var form = "<form id=\"delete-form-" + row.id + "\" action=\"/books/" + row.id + "\" method=\"POST\" style=\"display: none;\"> <input type = \"hidden\" name=\"_token\" value=\" {{csrf_token()}} \"> <input type = \"hidden\" name=\"_method\" value=\"delete\" /> </form>";
+                        var allButton = dropdown + buttons + form;
+                        return allButton;
+                    }
+                }
+            ]
+        });
+    });
 
     @if(session('success'))
     $(document).Toasts('create', {
@@ -134,8 +155,7 @@
         title: 'Berhasil',
         autohide: true, // Enable auto hide
         delay: 3000, // Auto close after 3 seconds
-        body: '{{ session('
-        success ') }}'
+        body: '{{ session("success") }}'
     });
     @endif
 </script>

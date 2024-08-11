@@ -55,18 +55,38 @@
                         <div class="form-group">
                             <label for="full_name">Nama Lengkap</label>
                             <input type="text" class="form-control" id="full_name" name="full_name" value="{{ old('full_name', $member->full_name) }}" required>
+                            @if ($errors->has('full_name'))
+                            <div class="text-danger">
+                                {{ $errors->first('full_name') }}
+                            </div>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="address">Alamat</label>
                             <textarea class="form-control" id="address" name="address" rows="3" required>{{ old('address', $member->address) }}</textarea>
+                            @if ($errors->has('address'))
+                            <div class="text-danger">
+                                {{ $errors->first('address') }}
+                            </div>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="phone">Telepon</label>
                             <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $member->phone) }}" required>
+                            @if ($errors->has('phone'))
+                            <div class="text-danger">
+                                {{ $errors->first('phone') }}
+                            </div>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $member->email) }}" required>
+                            @if ($errors->has('email'))
+                            <div class="text-danger">
+                                {{ $errors->first('email') }}
+                            </div>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="type">Tipe Anggota</label>

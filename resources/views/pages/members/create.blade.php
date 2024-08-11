@@ -54,28 +54,48 @@
                         <div class="form-group">
                             <label for="full_name">Nama Lengkap</label>
                             <input type="text" class="form-control" id="full_name" name="full_name" value="{{ old('full_name') }}" maxlength="255" onkeypress="return isLetter(event)" required="" oninvalid="this.setCustomValidity('Nama wajib diisi!')" oninput="setCustomValidity('')">
+                            @if ($errors->has('full_name'))
+                            <div class="text-danger">
+                                {{ $errors->first('full_name') }}
+                            </div>
+                            @endif
                         </div>
                         <div class="form-group">
                             <label for="address">Alamat</label>
                             <textarea class="form-control" id="address" name="address" rows="3" required maxlength="255" oninvalid="this.setCustomValidity('Alamat wajib diisi!')" oninput="setCustomValidity('')">{{ old('address') }}</textarea>
+                            @if ($errors->has('address'))
+                            <div class="text-danger">
+                                {{ $errors->first('address') }}
+                            </div>
+                            @endif
                         </div>
                         <div class=" row">
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="phone">Telepon</label>
                                     <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" maxlength="255" onkeypress="return isNumber(event)" onpaste="return false;" required oninvalid="this.setCustomValidity('Telepon wajib diisi!')" oninput="setCustomValidity('')">
+                                    @if ($errors->has('phone'))
+                                    <div class="text-danger">
+                                        {{ $errors->first('phone') }}
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" maxlength="255" required oninvalid="if (this.value == ''){this.setCustomValidity('Email wajib diisi!')} if (this.value != ''){this.setCustomValidity('Format email tidak valid!')}" oninput="setCustomValidity('')">
+                                    @if ($errors->has('email'))
+                                    <div class="text-danger">
+                                        {{ $errors->first('email') }}
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="member_type">Tipe Anggota</label>
+                            <label for="type">Tipe Anggota</label>
                             <select class="form-control" id="type" name="type" required oninvalid="this.setCustomValidity('Pilih tipe anggota!')" oninput="setCustomValidity('')">
                                 <option value="" disabled selected>Pilih tipe anggota</option>
                                 <option value="pelajar" {{ old('member_type') == 'pelajar' ? 'selected' : '' }}>Pelajar</option>
@@ -84,9 +104,9 @@
                                 <option value="dosen" {{ old('member_type') == 'dosen' ? 'selected' : '' }}>Dosen</option>
                                 <option value="umum" {{ old('member_type') == 'umum' ? 'selected' : '' }}>Umum</option>
                             </select>
-                            @if ($errors->has('member_type'))
+                            @if ($errors->has('type'))
                             <div class="text-danger">
-                                {{ $errors->first('member_type') }}
+                                {{ $errors->first('type') }}
                             </div>
                             @endif
                         </div>

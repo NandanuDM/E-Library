@@ -41,24 +41,24 @@
                     <div class="card-body">
                         <!-- validation error handler -->
                         @if ($errors->any())
-                            <div class="alert alert-secondary alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <h5><i class="icon fas fa-exclamation-triangle"></i> Terdapat input yang tidak valid!</h5>
-                                <ul class="mb-0 px-3">
-                                    @foreach ($errors->all() as $error)
-                                        <li><small>{{ $error }}</small></li>
-                                    @endforeach
-                                </ul>
-                            </div>
+                        <div class="alert alert-secondary alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h5><i class="icon fas fa-exclamation-triangle"></i> Terdapat input yang tidak valid!</h5>
+                            <ul class="mb-0 px-3">
+                                @foreach ($errors->all() as $error)
+                                <li><small>{{ $error }}</small></li>
+                                @endforeach
+                            </ul>
+                        </div>
                         @endif
 
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="member_id">Anggota</label>
-                                    <select class="form-control" id="member_id" name="member_id" required>
+                                    <select class="form-control" id="member_id" name="member_id" required oninvalid="this.setCustomValidity('Anggota wajib dipilih!')" oninput="setCustomValidity('')">
                                         @foreach($members as $member)
-                                            <option value="{{ $member->id }}" {{ $member->id == $borrowing->member_id ? 'selected' : '' }}>{{ $member->full_name }}</option>
+                                        <option value="{{ $member->id }}" {{ $member->id == $borrowing->member_id ? 'selected' : '' }}>{{ $member->full_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -66,10 +66,10 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="book_id">Buku</label>
-                                    <select class="form-control" id="book_id" name="book_id" required onchange="updateRentalPrice()">
+                                    <select class="form-control" id="book_id" name="book_id" required onchange="updateRentalPrice()" oninvalid="this.setCustomValidity('Buku wajib dipilih!')" oninput="setCustomValidity('')">
                                         <option value="" selected disabled>Pilih Buku</option>
                                         @foreach($books as $book)
-                                            <option value="{{ $book->id }}" data-rental-price="{{ $book->rental_price }}" {{ $book->id == $borrowing->book_id ? 'selected' : '' }}>{{ $book->title }}</option>
+                                        <option value="{{ $book->id }}" data-rental-price="{{ $book->rental_price }}" {{ $book->id == $borrowing->book_id ? 'selected' : '' }}>{{ $book->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -77,7 +77,7 @@
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="borrow_date">Tanggal Peminjaman</label>
-                                    <input type="date" class="form-control" id="borrow_date" name="borrow_date" value="{{ old('borrow_date', \Carbon\Carbon::parse($borrowing->borrow_date)->format('Y-m-d')) }}" required>
+                                    <input type="date" class="form-control" id="borrow_date" name="borrow_date" value="{{ old('borrow_date', \Carbon\Carbon::parse($borrowing->borrow_date)->format('Y-m-d')) }}" required oninvalid="this.setCustomValidity('Tanggal peminjaman wajib diisi!')" oninput="setCustomValidity('')">
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6">
@@ -95,7 +95,7 @@
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="status">Status</label>
-                                    <select class="form-control" id="status" name="status" required onchange="checkStatus()">
+                                    <select class="form-control" id="status" name="status" required onchange="checkStatus()" oninvalid="this.setCustomValidity('Status wajib dipilih!')" oninput="setCustomValidity('')">
                                         <option value="dipinjam" {{ $borrowing->status == 'dipinjam' ? 'selected' : '' }}>Dipinjam</option>
                                         <option value="dikembalikan" {{ $borrowing->status == 'dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
                                     </select>
@@ -119,36 +119,36 @@
 
 @section('js')
 <script>
-function updateRentalPrice() {
-    const bookSelect = document.getElementById('book_id');
-    const rentalPriceInput = document.getElementById('rental_price');
-    const selectedOption = bookSelect.options[bookSelect.selectedIndex];
-    const rentalPrice = selectedOption.getAttribute('data-rental-price');
-    rentalPriceInput.value = rentalPrice;
-}
-
-function checkReturnDate() {
-    const statusSelect = document.getElementById('status');
-    const returnDateInput = document.getElementById('return_date');
-    if (statusSelect.value === 'dipinjam') {
-        returnDateInput.value = '';
+    function updateRentalPrice() {
+        const bookSelect = document.getElementById('book_id');
+        const rentalPriceInput = document.getElementById('rental_price');
+        const selectedOption = bookSelect.options[bookSelect.selectedIndex];
+        const rentalPrice = selectedOption.getAttribute('data-rental-price');
+        rentalPriceInput.value = rentalPrice;
     }
-}
 
-function checkStatus() {
-    const statusSelect = document.getElementById('status');
-    const returnDateInput = document.getElementById('return_date');
-    if (statusSelect.value === 'dipinjam') {
-        returnDateInput.value = '';
-        returnDateInput.disabled = true;
-    } else {
-        returnDateInput.disabled = false;
+    function checkReturnDate() {
+        const statusSelect = document.getElementById('status');
+        const returnDateInput = document.getElementById('return_date');
+        if (statusSelect.value === 'dipinjam') {
+            returnDateInput.value = '';
+        }
     }
-}
 
-// Initial check
-document.addEventListener('DOMContentLoaded', function() {
-    checkStatus();
-});
+    function checkStatus() {
+        const statusSelect = document.getElementById('status');
+        const returnDateInput = document.getElementById('return_date');
+        if (statusSelect.value === 'dipinjam') {
+            returnDateInput.value = '';
+            returnDateInput.disabled = true;
+        } else {
+            returnDateInput.disabled = false;
+        }
+    }
+
+    // Initial check
+    document.addEventListener('DOMContentLoaded', function() {
+        checkStatus();
+    });
 </script>
 @endsection
