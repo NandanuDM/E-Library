@@ -17,7 +17,7 @@ class UpdateBookRequest extends FormRequest
 
         return [
             'title' => 'required|string|max:255',
-            'isbn' => 'required|string|max:20|unique:books,isbn,' . $bookId,
+            'isbn' => 'required|string|max:20|unique:books,isbn,' . $bookId . ',id,deleted_at,null',
             'author' => 'required|string|max:255',
             'published_year' => 'required|integer',
             'category_id' => 'required|integer|exists:categories,id',

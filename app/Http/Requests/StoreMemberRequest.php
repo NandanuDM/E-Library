@@ -23,7 +23,7 @@ class StoreMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo' => 'required|file|mimes:jpg,png,jpeg|max:1024', // max 1MB
+            // 'photo' => 'required|file|mimes:jpg,png,jpeg|max:1024', // max 1MB
             'full_name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             // 'phone' => 'required|string|max:15|unique:members,phone',
@@ -41,10 +41,10 @@ class StoreMemberRequest extends FormRequest
     public function messages()
     {
         return [
-            'photo.required' => 'Foto wajib diunggah.',
-            'photo.file' => 'Foto harus berupa berkas.',
-            'photo.mimes' => 'Foto harus berupa berkas berformat jpg, png, atau jpeg.',
-            'photo.max' => 'Foto tidak boleh lebih dari 1MB.',
+            // 'photo.required' => 'Foto wajib diunggah.',
+            // 'photo.file' => 'Foto harus berupa berkas.',
+            // 'photo.mimes' => 'Foto harus berupa berkas berformat jpg, png, atau jpeg.',
+            // 'photo.max' => 'Foto tidak boleh lebih dari 1MB.',
             'full_name.required' => 'Nama lengkap wajib diisi',
             'full_name.string' => 'Nama lengkap harus berupa teks',
             'full_name.max' => 'Nama lengkap maksimal 255 karakter',

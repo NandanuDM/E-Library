@@ -88,7 +88,10 @@ class MemberController extends Controller
 
             // Save the path to the validated data
             $validatedData['photo'] = $path;
+        } else {
+            $validatedData['photo'] = "";
         }
+
 
         Member::create($validatedData);
 

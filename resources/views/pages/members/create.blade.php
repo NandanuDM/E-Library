@@ -73,7 +73,7 @@
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="phone">Telepon</label>
-                                    <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" maxlength="255" onkeypress="return isNumber(event)" onpaste="return false;" required oninvalid="this.setCustomValidity('Telepon wajib diisi!')" oninput="setCustomValidity('')">
+                                    <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" maxlength="15" onkeypress="return isNumber(event)" onpaste="return false;" required oninvalid="this.setCustomValidity('Telepon wajib diisi!')" oninput="setCustomValidity('')">
                                     @if ($errors->has('phone'))
                                     <div class="text-danger">
                                         {{ $errors->first('phone') }}
@@ -114,7 +114,7 @@
                             <label for="photo">Foto Anggota</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="customfile-input" id="photo" name="photo" accept=".png,.jpg,.jpeg" required oninvalid="this.setCustomValidity('Foto anggota wajib diunggah!')" oninput="setCustomValidity('')">
+                                    <input type="file" class="customfile-input" id="photo" name="photo" accept=".png,.jpg,.jpeg">
                                     <label class="custom-file-label" for="photo">Pilih foto anggota</label>
                                 </div>
                                 <div class="input-group-append">

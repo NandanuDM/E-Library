@@ -54,7 +54,7 @@
 
                         <div class="form-group">
                             <label for="full_name">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="full_name" name="full_name" value="{{ old('full_name', $member->full_name) }}" required>
+                            <input type="text" class="form-control" id="full_name" name="full_name" value="{{ old('full_name', $member->full_name) }}" maxlength="255" onkeypress="return isLetter(event)" required="" oninvalid="this.setCustomValidity('Nama wajib diisi!')" oninput="setCustomValidity('')">
                             @if ($errors->has('full_name'))
                             <div class="text-danger">
                                 {{ $errors->first('full_name') }}
@@ -63,7 +63,7 @@
                         </div>
                         <div class="form-group">
                             <label for="address">Alamat</label>
-                            <textarea class="form-control" id="address" name="address" rows="3" required>{{ old('address', $member->address) }}</textarea>
+                            <textarea class="form-control" id="address" name="address" rows="3" required maxlength="255" oninvalid="this.setCustomValidity('Alamat wajib diisi!')" oninput="setCustomValidity('')">{{ old('address', $member->address) }}</textarea>
                             @if ($errors->has('address'))
                             <div class="text-danger">
                                 {{ $errors->first('address') }}
@@ -72,7 +72,7 @@
                         </div>
                         <div class="form-group">
                             <label for="phone">Telepon</label>
-                            <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $member->phone) }}" required>
+                            <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone', $member->phone) }}" maxlength="15" onkeypress="return isNumber(event)" onpaste="return false;" required oninvalid="this.setCustomValidity('Telepon wajib diisi!')" oninput="setCustomValidity('')">
                             @if ($errors->has('phone'))
                             <div class="text-danger">
                                 {{ $errors->first('phone') }}
@@ -81,7 +81,7 @@
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $member->email) }}" required>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $member->email) }}" required oninvalid="if (this.value == ''){this.setCustomValidity('Email wajib diisi!')} if (this.value != ''){this.setCustomValidity('Format email tidak valid!')}" oninput="setCustomValidity('')">
                             @if ($errors->has('email'))
                             <div class="text-danger">
                                 {{ $errors->first('email') }}
@@ -90,7 +90,7 @@
                         </div>
                         <div class="form-group">
                             <label for="type">Tipe Anggota</label>
-                            <select class="form-control" id="type" name="type" required>
+                            <select class="form-control" id="type" name="type" required oninvalid="this.setCustomValidity('Pilih tipe anggota!')" oninput="setCustomValidity('')">
                                 <option value="" disabled selected>Pilih tipe anggota</option>
                                 <option value="pelajar" {{ old('type', $member->type) == 'pelajar' ? 'selected' : '' }}>Pelajar</option>
                                 <option value="mahasiswa" {{ old('type', $member->type) == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
@@ -108,7 +108,7 @@
                             <label for="photo">Foto Anggota</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="customfile-input" id="photo" name="photo" accept=".png,.jpg,.jpeg" required>
+                                    <input type="file" class="customfile-input" id="photo" name="photo" accept=".png,.jpg,.jpeg" value="{{ $member->photo }}">
                                     <label class="custom-file-label" for="photo">Pilih foto anggota</label>
                                 </div>
                                 <div class="input-group-append">
@@ -153,6 +153,23 @@
 
 @section('js')
 <script>
+    function isNumber(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if ((charCode > 31 && charCode < 48) || charCode > 57) {
+            return false;
+        }
+        return true;
+    }
+
+    function isLetter(evt) {
+        var regex = new RegExp("^[a-zA-Z]+$");
+        var key = String.fromCharCode(!evt.charCode ? evt.which : evt.charCode);
+        if (!regex.test(key)) {
+            evt.preventDefault();
+            return false;
+        }
+    }
     $(document).ready(function() {
         // Store initial cover image for cancel functionality
         const initialphoto = $('#photoPreview').attr('src');

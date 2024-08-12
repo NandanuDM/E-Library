@@ -89,7 +89,7 @@
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="return_date">Tanggal Pengembalian</label>
-                                    <input type="date" class="form-control" id="return_date" name="return_date" value="{{ old('return_date', $borrowing->status === 'dikembalikan' ? \Carbon\Carbon::parse($borrowing->return_date)->format('Y-m-d') : '') }}">
+                                    <input type="date" class="form-control" id="return_date" name="return_date" min="{{ \Carbon\Carbon::parse($borrowing->borrow_date)->format('Y-m-d') }}" value=" {{ old('return_date', $borrowing->status === 'dikembalikan' ? \Carbon\Carbon::parse($borrowing->return_date)->format('Y-m-d') : '') }}">
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6">
@@ -119,6 +119,20 @@
 
 @section('js')
 <script>
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    document.getElementById("return_date").setAttribute("max", today);
+
     function updateRentalPrice() {
         const bookSelect = document.getElementById('book_id');
         const rentalPriceInput = document.getElementById('rental_price');

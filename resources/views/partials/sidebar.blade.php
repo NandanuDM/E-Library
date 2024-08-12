@@ -87,7 +87,7 @@
                         </p>
                     </a>
                 </li>
-
+                <!--     
                 {{-- Sample pages --}}
                 <li class="nav-header">Halaman Contoh</li>
                 <li class="nav-item">
@@ -97,12 +97,12 @@
                             Date Picker
                         </p>
                     </a>
-                </li>
+                </li> -->
 
                 {{-- Settings --}}
                 <li class="nav-header">Pengaturan</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('accounts.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Akun

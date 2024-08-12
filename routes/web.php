@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
+    AccountController,
     BorrowingController,
     BookController,
     DashboardController,
@@ -59,6 +60,10 @@ Route::middleware('auth')->group(function () {
 
     // Publisher routes
     Route::resource('publishers', PublisherController::class);
+
+    //Accout routes
+    Route::post('accounts/password', [AccountController::class, 'passwordChange'])->name('accounts.passwordChange');
+    Route::resource('accounts', AccountController::class);
 
     // User routes protected with role middleware
     Route::resource('users', UserController::class)->middleware('role:admin');
