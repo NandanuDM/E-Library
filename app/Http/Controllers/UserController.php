@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -12,13 +14,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $librarians = User::where('role', 'librarian')
-            ->select('id', 'name', 'email', 'created_at')
-            ->get();
+        if ($request->ajax()) {
+            $librarians = User::select('id', 'name', 'email', 'role', 'created_at')
+                ->get();
 
-        return view('pages.users.index', compact('librarians'));
+            return DataTables::of($librarians)
+                ->addIndexColumn()
+                ->make();
+        }
+
+        return view('pages.users.index');
     }
 
     /**
@@ -37,23 +44,15 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,librarian',
-        ]);
+        $validatedData = $request->validated();
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role' => $request->role,
-        ]);
+        $validatedData['password'] = bcrypt($validatedData['password']);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        User::create($validatedData);
+
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
     /**
@@ -114,6 +113,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil dihapus.');
     }
 }
