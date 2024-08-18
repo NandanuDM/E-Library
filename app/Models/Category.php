@@ -9,7 +9,12 @@ class Category extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name'];
+    protected $table = 'categories';
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'name',
+    ];
 
     protected $dates = ['deleted_at'];
 
@@ -18,6 +23,6 @@ class Category extends Model
      */
     public function books()
     {
-        return $this->hasMany(Book::class);
+        return $this->hasMany(Book::class, "category_id", "id");
     }
 }

@@ -15,6 +15,10 @@ class Borrowing extends Model
      *
      * @var array
      */
+
+    protected $table = 'borrowings';
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'member_id',
         'book_id',

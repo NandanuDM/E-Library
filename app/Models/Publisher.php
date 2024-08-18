@@ -9,6 +9,9 @@ class Publisher extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'publishers';
+    protected $primaryKey = 'id';
+
     protected $fillable = ['name'];
 
     protected $dates = ['deleted_at'];
@@ -18,6 +21,6 @@ class Publisher extends Model
      */
     public function books()
     {
-        return $this->hasMany(Book::class);
+        return $this->hasMany(Book::class, 'publisher_id', 'id');
     }
 }

@@ -29,7 +29,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <a class="btn btn-primary float-left" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus mr-1"></i>Tambah kategeori</a>
+                    <a class="btn btn-primary float-left" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus mr-1"></i>Tambah kategori</a>
                 </div>
                 <div class="card-body">
                     <!-- validation error handler -->

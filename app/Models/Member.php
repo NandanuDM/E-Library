@@ -15,6 +15,10 @@ class Member extends Model
      *
      * @var array
      */
+
+    protected $table = 'members';
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'photo',
         'full_name',

@@ -126,6 +126,7 @@ class BorrowingController extends Controller
                 'borrow_date' => $request->borrow_date,
                 'rental_price' => $request->rental_price,
                 'status' => 'dipinjam',
+                'late_fee' => 0
             ]);
 
             return redirect()->route('borrowings.index')->with('success', 'Peminjaman berhasil dicatat.');

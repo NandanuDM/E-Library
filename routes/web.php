@@ -37,7 +37,13 @@ Route::middleware('auth')->group(function () {
     // Dashboard routes
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/data/books-by-month', [DashboardController::class, 'getBooksByMonthData'])->name('dashboard.data.books_by_month');
+        Route::post('/', [DashboardController::class, "index"])->name('dashboard.filter');
+        Route::post('/data/books-by-month', [DashboardController::class, 'getBooksByMonthData'])->name('dashboard.data.books_by_month');
+        Route::post('/data/getBooksByCategory', [DashboardController::class, 'getBooksByCategory'])->name('dashboard.data.getBooksByCategory');
+        Route::post('/data/getBooksStatus', [DashboardController::class, 'getBooksStatus'])->name('dashboard.data.getBooksStatus');
+        Route::post('/data/getBestSellerBooks', [DashboardController::class, 'getBestSellerBooks'])->name('dashboard.data.getBestSellerBooks');
+        Route::post('/data/getTotalBorrower', [DashboardController::class, 'getTotalBorrower'])->name('dashboard.data.getTotalBorrower');
+        Route::post('/data/getTotalIncome', [DashboardController::class, 'getTotalIncome'])->name('dashboard.data.getTotalIncome');
     });
 
     // Member routes

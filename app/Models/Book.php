@@ -9,8 +9,19 @@ class Book extends Model
 {
     use SoftDeletes; // Using SoftDeletes trait
 
+    protected $table = 'books';
+    protected $primaryKey = 'id';
+
     protected $fillable = [
-        'title', 'isbn', 'author', 'published_year', 'category_id', 'publisher_id', 'cover_image', 'stock', 'rental_price',
+        'title',
+        'isbn',
+        'author',
+        'published_year',
+        'category_id',
+        'publisher_id',
+        'cover_image',
+        'stock',
+        'rental_price',
     ];
 
     protected $dates = ['deleted_at']; // Defining deleted_at column for soft deletes
@@ -20,7 +31,7 @@ class Book extends Model
      */
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
     /**
@@ -28,6 +39,6 @@ class Book extends Model
      */
     public function publisher()
     {
-        return $this->belongsTo(Publisher::class);
+        return $this->belongsTo(Publisher::class, 'publisher_id', 'id');
     }
 }
