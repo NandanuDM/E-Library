@@ -254,14 +254,14 @@ function createTotalBorrowerchart(
             type: "column",
         },
         title: {
-            text: title,
+            text: null,
             align: "left",
         },
         credits: {
             enabled: false,
         },
         subtitle: {
-            text: subtitle,
+            text: null,
             align: "left",
         },
         exporting: {
@@ -317,12 +317,12 @@ function createTotalIncomeChart(
             type: "line",
         },
         title: {
-            text: title,
+            text: null,
             align: "left",
         },
 
         subtitle: {
-            text: subtitle,
+            text: null,
             align: "left",
         },
 

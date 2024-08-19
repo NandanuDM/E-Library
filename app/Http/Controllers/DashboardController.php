@@ -20,7 +20,8 @@ class DashboardController extends Controller
             'book' => function ($query) {
                 $query->withTrashed();
             }
-        ]);
+        ])
+        ->where('return_date', null);
         if ($month) {
             $borrowings = $borrowings->whereMonth('updated_at', $month);
         }
@@ -58,43 +59,168 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
+        setlocale(LC_ALL, 'IND');
+        $currentmonth = Carbon::now()->formatLocalized('%B');
         $this->dataPage['month'] = null;
         $this->dataPage['jsmonth'] = null;
+        $this->dataPage['currentmonth'] = $currentmonth;
+        $currentmonth = Carbon::now();
+        $lastmonth = Carbon::parse(Carbon::now()->subMonth()->format('Y-m'));
 
         //Total Buku
+        // dd($lastmonth);
         $query = Book::select('*');
+        $query2 = Book::select('*');
         if ($request->month) {
-            $month = Carbon::parse($request->month);
-            // dd($month);
+            $month = Carbon::parse(Carbon::parse($request->month)->format('Y-m'));
+            $lastmonth = Carbon::parse(Carbon::parse($request->month)->subMonth()->format('Y-m'));
+            // dd($lastmonth);
+            $this->dataPage['currentmonth'] = Carbon::parse($request->month)->formatLocalized('%B');
             $this->dataPage['month'] = date('F Y', strtotime($request->month));
             $this->dataPage['jsmonth'] = $request->month;
             $query = $query->whereMonth('created_at', $month);
+            $lastcount = $query2->whereMonth('created_at', $lastmonth)->count();
+        } else {
+            $lastcount = $query2->whereMonth('created_at', $lastmonth)->count();
         }
-        // dd($query->count(), $month);
-        $this->dataPage['bookCount'] = $query->count();
+        $count = $query->count();
+        $percentage = round(abs(($count - $lastcount) / ($lastcount == 0 ? 1 : $lastcount)) * 100);
+        $difference = abs($count - $lastcount);
+        if ($count > $lastcount) {
+            $changes = "positive";
+        } else if ($count < $lastcount) {
+            $changes = "negative";
+        } else {
+            $changes = "neutral";
+        }
+        $this->dataPage["BookPercentage"] = $percentage;
+        $this->dataPage["BookDifference"] = $difference;
+        $this->dataPage["BookChanges"] = $changes;
+        $this->dataPage['bookCount'] = $count;
 
         //Buku Disewa
         $query = Borrowing::select('*')->where('status', 'dipinjam');
+        $query2 = Borrowing::select('*')->where('status', 'dipinjam');
         if ($request->month) {
-            $query = $this->MonthFilter($query, $month);
+            $query = $query->whereMonth('borrow_date', $month);
+            $lastcount = $query2->whereMonth('borrow_date', $lastmonth)->count();
+        } else {
+            $lastcount = $query2->whereMonth('borrow_date', $lastmonth)->count();
         }
-        $this->dataPage['rentedBook'] = $query->count();
+        $count = $query->count();
+        $percentage = round(abs(($count - $lastcount) / ($lastcount == 0 ? 1 : $lastcount)) * 100);
+        $difference = abs($count - $lastcount);
+        if ($count > $lastcount) {
+            $changes = "positive";
+        } else if ($count < $lastcount) {
+            $changes = "negative";
+        } else {
+            $changes = "neutral";
+        }
+        $this->dataPage["RentedPercentage"] = $percentage;
+        $this->dataPage["RentedDifference"] = $difference;
+        $this->dataPage["RentedChanges"] = $changes;
+        $this->dataPage['RentedCount'] = $count;
+        $this->dataPage['rentedBook'] = $count;
 
         //Buku telat kembali
         if ($request->month) {
-            $this->dataPage["late"] = $this->lateReturn(false, $month);
+            $count = $this->lateReturn(false, $month);
+            $lastcount = $this->lateReturn(false, $lastmonth);
+            $percentage = round(abs(($count - $lastcount) / ($lastcount == 0 ? 1 : $lastcount)) * 100);
+            $difference = abs($count - $lastcount);
+            if ($count > $lastcount) {
+                $changes = "positive";
+            } else if ($count < $lastcount) {
+                $changes = "negative";
+            } else {
+                $changes = "neutral";
+            }
+            $this->dataPage["LatePercentage"] = $percentage;
+            $this->dataPage["LateDifference"] = $difference;
+            $this->dataPage["LateChanges"] = $changes;
+            $this->dataPage['LateCount'] = $count;
+            $this->dataPage["late"] = $count;
         } else {
-            $this->dataPage["late"] = $this->lateReturn(false, null);
+            $count = $this->lateReturn(false, null);
+            $lastcount = $this->lateReturn(false, $lastmonth);
+            $percentage = round(abs(($count - $lastcount) / ($lastcount == 0 ? 1 : $lastcount)) * 100);
+            $difference = abs($count - $lastcount);
+            if ($count > $lastcount) {
+                $changes = "positive";
+            } else if ($count < $lastcount) {
+                $changes = "negative";
+            } else {
+                $changes = "neutral";
+            }
+            $this->dataPage["LatePercentage"] = $percentage;
+            $this->dataPage["LateDifference"] = $difference;
+            $this->dataPage["LateChanges"] = $changes;
+            $this->dataPage['LateCount'] = $count;
+            $this->dataPage["late"] = $count;
         }
 
         //Total Anggota
         $query = Member::select('*');
+        $query2 = Member::select('*');
         if ($request->month) {
             $query = $this->MonthFilter($query, $month);
+            $lastcount = $this->MonthFilter($query2, $lastmonth)->count();
+        } else {
+            $lastcount = $query2->whereMonth('created_at', $lastmonth)->count();
         }
-        $this->dataPage["memberCount"] = $query->count();
+        $count = $query->count();
+        $percentage = round(abs(($count - $lastcount) / ($lastcount == 0 ? 1 : $lastcount)) * 100);
+        $difference = abs($count - $lastcount);
+        if ($count > $lastcount) {
+            $changes = "positive";
+        } else if ($count < $lastcount) {
+            $changes = "negative";
+        } else {
+            $changes = "neutral";
+        }
+        $this->dataPage["MemberPercentage"] = $percentage;
+        $this->dataPage["MemberDifference"] = $difference;
+        $this->dataPage["MemberChanges"] = $changes;
+        $this->dataPage["memberCount"] = $count;
 
-        //Kategori Populer
+        // Total Income Month Differences
+        $query = Borrowing::select('rental_price', 'late_fee');
+        $query2 = Borrowing::select('rental_price', 'late_fee');
+
+        if ($request->month){
+            $query = $query->whereMonth('updated_at', $month)->get();
+            $query2 = $query2->whereMonth('updated_at', $lastmonth)->get();
+        } else {
+            $query = $query->whereMonth('updated_at', $currentmonth)->get();
+            $query2 = $query2->whereMonth('updated_at', $lastmonth)->get();
+        }
+
+        $currentIncome = 0;
+        $pastIncome = 0;
+        foreach($query as $key => $values){
+            $currentIncome += $values->rental_price + $values->late_fee;
+        }
+
+        foreach($query2 as $key => $values){
+            $pastIncome += $values->rental_price + $values->late_fee;
+        }
+
+        $percentage = round(abs(($currentIncome - $pastIncome) / ($pastIncome == 0 ? 1 : $pastIncome)) * 100);
+        $difference = abs($currentIncome - $pastIncome);
+        if ($currentIncome > $pastIncome) {
+            $changes = "positive";
+        } else if ($currentIncome < $pastIncome) {
+            $changes = "negative";
+        } else {
+            $changes = "neutral";
+        }
+        $this->dataPage["IncomePercentage"] = $percentage;
+        $this->dataPage["IncomeDifference"] = $difference;
+        $this->dataPage["IncomeChanges"] = $changes;
+        $this->dataPage["IncomeCount"] = $currentIncome;
+       
+        //Popular category Table
         $categories = Category::select('name')->distinct()->get();
 
         foreach ($categories as $key => $value) {
@@ -196,6 +322,7 @@ class DashboardController extends Controller
             ->paginate(4);
 
         $this->dataPage['RecentBorrows'] = $borrowings;
+
         return view('pages.dashboard.index', $this->dataPage);
     }
 
@@ -222,29 +349,6 @@ class DashboardController extends Controller
             'Belum Kembali' => $late,
         ];
         return response()->json($data);
-    }
-
-    public function getBooksByMonthData(Request $request)
-    {
-        // Get all borrowings for the year 2024 and process them in PHP
-        $borrowings = Borrowing::whereYear('borrow_date', 2024)->get()->groupBy(function ($date) {
-            return Carbon::parse($date->borrow_date)->format('m'); // Group by months
-        });
-
-        $borrowingsCount = [];
-        $borrowMonths = [];
-        foreach ($borrowings as $key => $value) {
-            $borrowingsCount[(int)$key] = count($value); // Count the number of borrowings for each month
-            $borrowMonths[(int)$key] = Carbon::create()->month($key)->locale('id')->isoFormat('MMM'); // Get the month name in Indonesian
-        }
-
-        ksort($borrowingsCount);
-        ksort($borrowMonths);
-
-        return response()->json([
-            'borrowings' => array_values($borrowingsCount),
-            'months' => array_values($borrowMonths),
-        ]);
     }
 
     public function getBooksByCategory(Request $request)

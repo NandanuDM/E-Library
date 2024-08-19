@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dasbor')
+@section('title', 'Dashboard')
 
 @section('page-header')
 <div class="row">
@@ -53,9 +53,29 @@
                         <span class="bg-primary rounded mr-2 p-3">
                             <i class="fa fa-regular fa-book h2"></i>
                         </span>
-                        <div class="content-left">
+                        <div class="content-left w-100">
                             <p class="mb-0 pb-2">Total Buku</p>
-                            <strong>{{ $bookCount }}</strong>
+                            <div class="d-flex align-items-start">
+                                <h4><strong>{{ $bookCount }}</strong></h4>
+                                @if($BookChanges == 'positive')
+                                <div class="Changes ml-2 mt-1" style="background-color: #b9deb8;">
+                                    <i class="fa fa-arrow-up pl-2 pb-1" style="color: #08b002;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #08b002;">+{{ $BookPercentage }}%(+{{ $BookDifference }})</small>
+                                </div>
+                                @endif
+                                @if($BookChanges == 'negative')
+                                <div class="Changes ml-2 mt-1" style="background-color: #deb8bf;">
+                                    <i class="fa fa-arrow-down pl-2 pb-1" style="color: #ba0022;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #ba0022;">-{{ $BookPercentage }}%(-{{ $BookDifference }})</small>
+                                </div>
+                                @endif
+                                @if($BookChanges == 'neutral')
+                                <div class="Changes ml-2 mt-1" style="background-color: #8288bd;">
+                                    <i class="fa fa-arrow-right pl-2 pb-1" style="color: #0416b8;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #0416b8;">{{ $BookPercentage }}%({{ $BookDifference }})</small>
+                                </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -68,9 +88,29 @@
                         <span class="bg-success rounded mr-2 p-3">
                             <i class="fa fa-solid fa-book-reader h2"></i>
                         </span>
-                        <div class="content-left">
+                        <div class="content-left w-100">
                             <p class="mb-0 pb-2">Buku Disewa</p>
-                            <strong>{{ $rentedBook }}</strong>
+                            <div class="d-flex align-items-start w-100">
+                                <h4><strong>{{ $rentedBook }}</strong></h4>
+                                @if($RentedChanges == 'positive')
+                                <div class="Changes ml-2 mt-1" style="background-color: #b9deb8;">
+                                    <i class="fa fa-arrow-up pl-2 pb-1" style="color: #08b002;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #08b002;">+{{ $RentedPercentage }}%(+{{ $RentedDifference }})</small>
+                                </div>
+                                @endif
+                                @if($RentedChanges == 'negative')
+                                <div class="Changes ml-2 mt-1" style="background-color: #deb8bf;">
+                                    <i class="fa fa-arrow-down pl-2 pb-1" style="color: #ba0022;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #ba0022;">-{{ $RentedPercentage }}%(-{{ $RentedDifference }})</small>
+                                </div>
+                                @endif
+                                @if($RentedChanges == 'neutral')
+                                <div class="Changes ml-2 mt-1" style="background-color: #8288bd;">
+                                    <i class="fa fa-arrow-right pl-2 pb-1" style="color: #0416b8;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #0416b8;">{{ $RentedPercentage }}%({{ $RentedDifference }})</small>
+                                </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +125,27 @@
                         </span>
                         <div class="content-left">
                             <p class="mb-0 pb-2">Buku Telat Kembali</p>
-                            <strong>{{ $late }}</strong>
+                            <div class="d-flex align-items-start w-100">
+                                <h4><strong>{{ $late }}</strong></h4>
+                                @if($LateChanges == 'positive')
+                                <div class="Changes ml-2 mt-1" style="background-color: #b9deb8;">
+                                    <i class="fa fa-arrow-up pl-2 pb-1" style="color: #08b002;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #08b002;">+{{ $LatePercentage }}%(+{{ $LateDifference }})</small>
+                                </div>
+                                @endif
+                                @if($LateChanges == 'negative')
+                                <div class="Changes ml-2 mt-1" style="background-color: #deb8bf;">
+                                    <i class="fa fa-arrow-down pl-2 pb-1" style="color: #ba0022;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #ba0022;">-{{ $LatePercentage }}%(-{{ $LateDifference }})</small>
+                                </div>
+                                @endif
+                                @if($LateChanges == 'neutral')
+                                <div class="Changes ml-2 mt-1" style="background-color: #8288bd;">
+                                    <i class="fa fa-arrow-right pl-2 pb-1" style="color: #0416b8;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #0416b8;">{{ $LatePercentage }}%({{ $LateDifference }})</small>
+                                </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,7 +160,27 @@
                         </span>
                         <div class="content-left">
                             <p class="mb-0 pb-2">Total Anggota</p>
-                            <strong>{{ $memberCount }}</strong>
+                            <div class="d-flex align-items-start w-100">
+                                <h4><strong>{{ $memberCount }}</strong></h4>
+                                @if($MemberChanges == 'positive')
+                                <div class="Changes ml-2 mt-1" style="background-color: #b9deb8;">
+                                    <i class="fa fa-arrow-up pl-2 pb-1" style="color: #08b002;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #08b002;">+{{ $MemberPercentage }}%(+{{ $MemberDifference }})</small>
+                                </div>
+                                @endif
+                                @if($MemberChanges == 'negative')
+                                <div class="Changes ml-2 mt-1" style="background-color: #deb8bf;">
+                                    <i class="fa fa-arrow-down pl-2 pb-1" style="color: #ba0022;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #ba0022;">-{{ $MemberPercentage }}%(-{{ $MemberDifference }})</small>
+                                </div>
+                                @endif
+                                @if($MemberChanges == 'neutral')
+                                <div class="Changes ml-2 mt-1" style="background-color: #8288bd;">
+                                    <i class="fa fa-arrow-right pl-2 pb-1" style="color: #0416b8;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #0416b8;">{{ $MemberPercentage }}%({{ $MemberDifference }})</small>
+                                </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -184,20 +264,82 @@
 
         <div class="col-12 col-lg-6">
             <div class="card">
-                <div class="text-center my-5" id="TotalBorrowerChartLoader">
-                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
-                </div>
-                <div class="card-body" id="TotalBorrowerChart">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col col-lg-6 pt-2">
+                            <h3 class="card-title text-bold">Total Penyewa Buku</h3><br>
+                            <small>Bulan {{ $currentmonth }}</small>
+                        </div>
+                        <div class="col col-lg-6 pt-2">
+                        <div class="align-items-end w-100">
+                                <h4 class="text-md-right"><strong>{{ $memberCount }}</strong></h4>
+                                @if($MemberChanges == 'positive')
+                                <div class="Changes ml-2 mt-1 text-md-right">
+                                    <i class="fa fa-arrow-up pl-2 pb-1" style="color: #08b002;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #08b002;">+{{ $MemberPercentage }}%(+{{ $MemberDifference }}) Dari Bulan Kemarin</small>
+                                </div>
+                                @endif
+                                @if($MemberChanges == 'negative')
+                                <div class="Changes ml-2 mt-1 text-md-right">
+                                    <i class="fa fa-arrow-down pl-2 pb-1" style="color: #ba0022;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #ba0022;">-{{ $MemberPercentage }}%(-{{ $MemberDifference }}) Dari Bulan Kemarin</small>
+                                </div>
+                                @endif
+                                @if($MemberChanges == 'neutral')
+                                <div class="Changes ml-2 mt-1 text-md-right">
+                                    <i class="fa fa-arrow-right pl-2 pb-1" style="color: #0416b8;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #0416b8;">{{ $MemberPercentage }}%({{ $MemberDifference }}) Dari Bulan Kemarin</small>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center my-5" id="TotalBorrowerChartLoader">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                    </div>
+                    <div class="container mt-2" id="TotalBorrowerChart">
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="col-12 col-lg-6">
             <div class="card">
-                <div class="text-center my-5" id="TotalIncomeChartLoader">
+                <div class="card-body">
+                <div class="row">
+                        <div class="col col-lg-6 pt-2">
+                            <h3 class="card-title text-bold">Total Pendapatan</h3><br>
+                            <small>Bulan {{ $currentmonth }}</small>
+                        </div>
+                        <div class="col col-lg-6 pt-2">
+                        <div class="align-items-end w-100">
+                                <h4 class="text-md-right"><strong>{{ formatRp($IncomeCount) }}</strong></h4>
+                                @if($IncomeChanges == 'positive')
+                                <div class="Changes ml-2 mt-1 text-md-right">
+                                    <i class="fa fa-arrow-up pl-2 pb-1" style="color: #08b002;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #08b002;">+{{ $IncomePercentage }}%(+{{ formatRp($IncomeDifference) }}) Dari Bulan Kemarin</small>
+                                </div>
+                                @endif
+                                @if($IncomeChanges == 'negative')
+                                <div class="Changes ml-2 mt-1 text-md-right">
+                                    <i class="fa fa-arrow-down pl-2 pb-1" style="color: #ba0022;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #ba0022;">-{{ $IncomePercentage }}%(-{{ formatRp($IncomeDifference) }}) Dari Bulan Kemarin</small>
+                                </div>
+                                @endif
+                                @if($IncomeChanges == 'neutral')
+                                <div class="Changes ml-2 mt-1 text-md-right">
+                                    <i class="fa fa-arrow-right pl-2 pb-1" style="color: #0416b8;"></i>
+                                    <small class="pr-2 pb-1 mb-2" style="color: #0416b8;">{{ $IncomePercentage }}%({{ formatRp($IncomeDifference) }}) Dari Bulan Kemarin</small>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center my-5" id="TotalIncomeChartLoader">
                     <i class="fas fa-2x fa-sync-alt fa-spin"></i>
                 </div>
-                <div class="card-body" id="TotalIncomeChart">
+                    <div class="container mt-2" id="TotalIncomeChart">
+                    </div>
                 </div>
             </div>
         </div>
@@ -207,7 +349,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col col-lg-6 pt-2">
-                            <h3 class="card-title text-bold">Penyewaan Terbaru</h2>
+                            <h3 class="card-title text-bold">Penyewaan Terbaru</h3>
                         </div>
                         <div class="col col-lg-6 pt-2">
                             <p class="text-md-right"><a href="{{ route('borrowings.index') }}">Lihat Semua</a></p>
@@ -246,7 +388,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col col-lg-6 pt-2">
-                            <h3 class="card-title text-bold">Pengembalian Terlambat</h2>
+                            <h3 class="card-title text-bold">Pengembalian Terlambat</h3>
                         </div>
                         <div class="col col-lg-6 pt-2">
                             <select class="form-control float-right" style="width: 150px;">
@@ -350,6 +492,17 @@
         width: 30%;
         height: 10px;
     }
+
+    .Changes {
+        width: auto;
+        border-radius: 25px;
+        height: auto;
+    }
+
+    .ChangesImage {
+        padding-left: 2;
+        padding-right: 2;
+    }
 </style>
 @endsection
 
@@ -359,7 +512,7 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <script>
-    var month = {!!json_encode($jsmonth) !!} ? {!!json_encode($jsmonth) !!} : null;
+    var month = {!!json_encode($jsmonth) !!} ? {!!json_encode($jsmonth) !!} : null; // # noqa
     console.log(month);
 
     function FilterSubmit() {
@@ -527,13 +680,6 @@
                     "y": response[i],
                 });
             }
-
-            var dates = ThreeDaysInterval();
-
-            var today = new Date(); // Your timezone!
-            var startdate = new Date(today);
-            startdate.setDate(today.getDate() - 30);
-            startdate.getTime();
             // var startdate = startdate.getTime();
 
             console.log(response.rents);
@@ -550,53 +696,6 @@
             $('#TotalIncomeChartLoader').hide();
         }
     });
-
-    function ThreeDaysInterval() {
-        const today = new Date();
-        const thirtyDaysAgo = new Date(today);
-        thirtyDaysAgo.setDate(today.getDate() - 30);
-
-        const dateArray = [];
-        let currentDate = today;
-
-        while (currentDate >= thirtyDaysAgo) {
-            const today = new Date(currentDate);
-            let mm = today.getMonth() + 1; // Months start at 0!
-            let dd = today.getDate();
-
-            if (dd < 10) dd = '0' + dd;
-            if (mm == 1) {
-                mm = 'Jan';
-            } else if (mm == 2) {
-                mm = 'Feb';
-            } else if (mm == 3) {
-                mm = 'Mar';
-            } else if (mm == 4) {
-                mm = 'Apr';
-            } else if (mm == 5) {
-                mm = 'May';
-            } else if (mm == 6) {
-                mm = 'Jun';
-            } else if (mm == 7) {
-                mm = 'Jul';
-            } else if (mm == 8) {
-                mm = 'Aug';
-            } else if (mm == 9) {
-                mm = 'Sep';
-            } else if (mm == 10) {
-                mm = 'Oct';
-            } else if (mm == 11) {
-                mm = 'Nov';
-            } else if (mm == 12) {
-                mm = 'Dec';
-            };
-            const formattedToday = dd + '-' + mm;
-            dateArray.push(formattedToday); // Push a copy of the current date
-            currentDate.setDate(currentDate.getDate() - 3); // Move 3 days back
-        }
-
-        return dateArray;
-    }
 </script>
 <script src="{{ asset('charts/dashboard.js') }}"></script>
 @endsection
