@@ -217,7 +217,7 @@
           </script>
           <div class="swiper-wrapper align-items-center">
             @foreach($recentbooks as $key => $values)
-            <div class="swiper-slide"><img src="{{ Storage::disk('public')->exists($values->cover_image ? $cover_image : 'cover.jpg') ? asset('storage/' . $values->cover_image) : asset('https://placehold.co/400x600') }}" class="img-fluid" alt="">{{ $values->title }}</div>
+            <div class="swiper-slide"><img src="{{ Storage::disk('public')->exists($values->cover_image ? $values->cover_image : 'cover.jpg') ? asset('storage/' . $values->cover_image) : asset('https://placehold.co/400x600') }}" class="img-fluid" alt="">{{ $values->title }}</div>
             @endforeach
           </div>
           <div class="swiper-pagination"></div>

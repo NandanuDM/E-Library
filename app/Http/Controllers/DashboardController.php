@@ -412,7 +412,7 @@ class DashboardController extends Controller
         // dd($date);
         $xaxisDates = [];
         $date = [];
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i <= 30; $i++) {
             // if (($i % 5 == 0) || ($i == 0)) {
             if ($currentdate) {
                 $xaxisDates[] = date("d-M", strtotime('-' . 30 - $i . ' days', strtotime($currentdate)));
