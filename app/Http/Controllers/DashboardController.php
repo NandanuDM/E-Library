@@ -492,7 +492,6 @@ class DashboardController extends Controller
         }
         $oldmembers = [];
         $newmembers = [];
-        $latefees = [];
         for ($i = 0; $i < count($olddate); $i++) {
             $query = Member::select('full_name')
                 ->whereDate('created_at', '<', $olddate[$i]);

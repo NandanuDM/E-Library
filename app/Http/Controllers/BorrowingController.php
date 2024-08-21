@@ -13,6 +13,88 @@ use Illuminate\Http\Request;
 
 class BorrowingController extends Controller
 {
+    public function export()
+    {
+        //File Name
+        $fileName = "Penyewaan Buku.xls"; 
+        
+        //Column Names
+        $excelData[] = array(             
+            'No',
+            'Nama Anggota',
+            'Judul Buku',
+            'Tanggal Peminjaman',
+            'Status',
+            'Keterlambatan',
+            'Denda Keterlambatan'
+        );
+
+        //Row Data
+        $data = Borrowing::with([
+            'member' => function ($query) {
+                $query->withTrashed();
+            },
+            'book' => function ($query) {
+                $query->withTrashed();
+            }
+        ])
+            ->orderBy('borrow_date', 'desc')
+            ->get();
+        $i = 1;
+        if (!$data == "") {
+            foreach ($data as $borrowing) {
+                $borrowDate = Carbon::parse($borrowing->borrow_date);
+                $dueDate = $borrowDate->copy()->addDays(7);
+                $returnDate = $borrowing->return_date ? Carbon::parse($borrowing->return_date) : Carbon::now();
+                $lateDays = 0;
+                $isLate = false;
+
+                if ($returnDate->gt($dueDate)) {
+                    $lateDays = $returnDate->diffInDays($dueDate, false);
+                    $isLate = true;
+                } elseif ($borrowing->return_date == null && Carbon::now()->gt($dueDate)) {
+                    $lateDays = Carbon::now()->diffInDays($dueDate, false);
+                    $isLate = true;
+                }
+
+                // Ensure lateDays is not negative
+                $lateDays = abs($lateDays);
+
+                // Calculate late fee
+                $lateFee = $lateDays * 1000;
+
+                $borrowing->late_days = $lateDays;
+                $borrowing->late_fee = $lateFee;
+                $borrowing->is_late = $isLate;
+
+                // Format late fee using helper function
+                $borrowing->formatted_late_fee = formatRp($lateFee);
+                // Format borrow date using helper function
+                $borrowing->formatted_borrow_date = formatDate($borrowing->borrow_date);
+                // Format return date using helper function
+                $borrowing->formatted_return_date = $borrowing->return_date ? formatDate($borrowing->return_date) : '-';
+            }
+
+            foreach ($data as $row) {
+                $excelData[] = array(
+                    $i,
+                    $row->member->full_name,
+                    $row->book->title,
+                    $row->borrow_date,
+                    $row->status,
+                    $row->is_late ? 'Terlambat' : 'Tidak terlambat',
+                    $row->formatted_late_fee
+                );
+                $i++;
+            }
+        } else {
+            $excelData[] = 'Data tidak tersedia';
+        }
+
+        $xlsx = PhpXlsxGenerator::fromArray($excelData);
+        $xlsx->downloadAs($fileName);
+    }
+
     /**
      * Display a listing of the borrowings.
      *

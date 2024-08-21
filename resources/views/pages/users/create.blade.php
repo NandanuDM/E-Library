@@ -58,7 +58,7 @@
                     <hr class="border-light m-0">
                     <div class="card-body">
                         <div class="form-group">
-                            <label class="form-label">Name</label>
+                            <label class="form-label">Nama</label>
                             <input type="text" id="name" name="name" class="form-control mb-1" value="" maxlength="255" onkeypress="return isLetter(event)" required="" oninvalid="this.setCustomValidity('Nama wajib diisi!')" oninput="setCustomValidity('')">
                         </div>
                         <div class="form-group">

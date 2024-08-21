@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><i class="fas fa-users mr-1"></i> Kategori</li>
+                            <li class="breadcrumb-item active"><i class="fas fa-list mr-1"></i> Kategori</li>
                         </ol>
                     </div>
                 </div>

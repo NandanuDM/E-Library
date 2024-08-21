@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
     AccountController,
+    ApplicationController,
     BorrowingController,
     BookController,
     DashboardController,
@@ -47,7 +48,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // Member routes
-    Route::get('members/export', [MemberController::class, 'export'])->name('export');
+    Route::get('members/export', [MemberController::class, 'export'])->name('members.export');
     Route::resource('members', MemberController::class);
 
     // Book routes including soft deletes
@@ -59,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('books', BookController::class);
 
     // Borrowing routes
+    Route::get('borrowings/export', [BorrowingController::class, 'export'])->name('borrowings.export');
     Route::resource('borrowings', BorrowingController::class);
 
     // Category routes
@@ -70,6 +72,10 @@ Route::middleware('auth')->group(function () {
     //Accout routes
     Route::post('accounts/password', [AccountController::class, 'passwordChange'])->name('accounts.passwordChange');
     Route::resource('accounts', AccountController::class);
+
+    //Application routes
+    Route::get('applications', [ApplicationController::class, 'index'])->name('applications.index');
+    Route::put('applications/{id}', [ApplicationController::class, 'update'])->name('applications.update');
 
     // User routes protected with role middleware
     Route::resource('users', UserController::class)->middleware('role:admin');

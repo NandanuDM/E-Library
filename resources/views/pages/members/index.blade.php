@@ -30,7 +30,7 @@
             <div class="card">
                 <div class="card-header">
                     <a href="{{ route('members.create') }}" class="btn btn-primary float-left"><i class="fas fa-plus mr-1"></i>Tambah Anggota</a>
-                    <a href="{{ route('export') }}" class="btn btn-success float-right"><i class="fas fa-light fa-file-export"></i></i> Export Excel</a>
+                    <a href="{{ route('members.export') }}" class="btn btn-success float-right"><i class="fas fa-light fa-file-export"></i></i> Export Excel</a>
                 </div>
                 <div class="card-body">
                     <table id="membersTable" class="table table-bordered table-striped dataTable dtr-inline">

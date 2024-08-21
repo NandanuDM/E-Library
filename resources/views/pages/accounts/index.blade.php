@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('accounts.index') }}"><i class="fas fa-users mr-1"></i> Akun</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('accounts.index') }}"><i class="fas fa-users-cog mr-1"></i> Akun</a></li>
                         </ol>
                     </div>
                 </div>
@@ -59,7 +59,7 @@
                     <hr class="border-light m-0">
                     <div class="card-body">
                         <div class="form-group">
-                            <label class="form-label">Name</label>
+                            <label class="form-label">Nama</label>
                             <input type="text" name="name" class="form-control mb-1" value="{{ Auth::user()->name }}" maxlength="255" onkeypress="return isLetter(event)" required="" oninvalid="this.setCustomValidity('Nama wajib diisi!')" oninput="setCustomValidity('')">
                         </div>
                         <div class="form-group">

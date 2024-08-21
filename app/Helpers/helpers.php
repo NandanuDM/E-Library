@@ -39,3 +39,16 @@ if (! function_exists('formatDate')) {
         }
     }
 }
+
+if (! function_exists('getApplication')) {
+    function getApplication()
+    {
+        try {
+            return App\Models\application::first();
+        } catch (\Exception $e) {
+            // Handle exception and return null
+            return null;
+        }
+    }
+}
+

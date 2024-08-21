@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><i class="fas fa-users mr-1"></i> Penerbit</li>
+                            <li class="breadcrumb-item active"><i class="fas fa-print mr-1"></i> Penerbit</li>
                         </ol>
                     </div>
                 </div>

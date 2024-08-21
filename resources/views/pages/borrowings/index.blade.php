@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item active"><i class="fas fa-book mr-1"></i> Penyewaan</li>
+                            <li class="breadcrumb-item active"><i class="fas fa-file mr-1"></i> Penyewaan</li>
                         </ol>
                     </div>
                 </div>
@@ -30,6 +30,7 @@
             <div class="card">
                 <div class="card-header">
                     <a href="{{ route('borrowings.create') }}" class="btn btn-primary"><i class="fas fa-plus mr-1"></i>Tambah Penyewaan</a>
+                    <a href="{{ route('borrowings.export') }}" class="btn btn-success float-right"><i class="fas fa-light fa-file-export"></i></i> Export Excel</a>
                 </div>
                 <div class="card-body">
                     <table id="borrowingsTable" class="table table-bordered table-striped dataTable dtr-inline">
