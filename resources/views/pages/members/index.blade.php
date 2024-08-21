@@ -89,7 +89,7 @@
                         if (FileExists('storage/' + data)) {
                             return '<img src="storage/' + data + '" width="80px height="80px">'
                         } else {
-                            return `<img src="{{ asset('storage/members/defaultPhoto.png') }}" width="80px" height="80px" />`;
+                            return `<img src="{{ asset('images/memberdefaultphoto.png') }}" width="80px" height="80px" />`;
                         }
                     }
                 },

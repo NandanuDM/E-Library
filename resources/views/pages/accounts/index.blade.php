@@ -39,7 +39,7 @@
                     @method('PUT')
                     <div class="card-body media align-items-center">
                         <div id="picture">
-                            <img id="photoPreview" src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('storage/accounts/default.jpg') }}">
+                            <img id="photoPreview" src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/accountdefaultphoto.jpg') }}">
                         </div>
                         <div class="media-body ml-4" id="mediabtn">
                             <label class="btn btn-outline-primary" id="filebutton">

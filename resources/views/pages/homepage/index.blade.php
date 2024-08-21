@@ -43,7 +43,7 @@
 
       <a href="index.blade.php" class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-        <img src="{{ Storage::disk('public')->exists($application->logo) ? asset('storage/'. $application->logo) : asset('homepage/assets/img/logo.png') }}" alt="">
+        <img src="{{ Storage::disk('public')->exists($application->logo ? $application->logo : 'logo.jpg') ? asset('storage/'. $application->logo) : asset('homepage/assets/img/logo.png') }}" alt="">
         <h1 class="sitename">{{ $application->name }}</h1>
       </a>
 
@@ -159,7 +159,7 @@
           @foreach ($mostborrowed as $key => $values)
           <div class="col-xl-3 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
             <div class="service-item position-relative">
-              <div class="icon"><img src="{{ Storage::disk('public')->exists($values->cover_image) ? asset('storage/' . $values->cover_image) : asset('https://placehold.co/400x600') }}" style="width: 600px; height:320px;" alt="{{ $values->title }}" class="img-fluid img-thumbnail"></div>
+              <div class="icon"><img src="{{ Storage::disk('public')->exists($values->cover_image ? $values->cover_image : 'cover.jpg') ? asset('storage/' . $values->cover_image) : asset('https://placehold.co/400x600') }}" style="width: 600px; height:320px;" alt="{{ $values->title }}" class="img-fluid img-thumbnail"></div>
               <h4><a class="stretched-link">{{ $values->title }}</a></h4>
             </div>
           </div><!-- End Service Item -->
@@ -217,7 +217,7 @@
           </script>
           <div class="swiper-wrapper align-items-center">
             @foreach($recentbooks as $key => $values)
-            <div class="swiper-slide"><img src="{{ Storage::disk('public')->exists($values->cover_image) ? asset('storage/' . $values->cover_image) : asset('https://placehold.co/400x600') }}" class="img-fluid" alt="">{{ $values->title }}</div>
+            <div class="swiper-slide"><img src="{{ Storage::disk('public')->exists($values->cover_image ? $cover_image : 'cover.jpg') ? asset('storage/' . $values->cover_image) : asset('https://placehold.co/400x600') }}" class="img-fluid" alt="">{{ $values->title }}</div>
             @endforeach
           </div>
           <div class="swiper-pagination"></div>

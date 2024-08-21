@@ -39,7 +39,7 @@
                     @method('PUT')
                     <div class="card-body media align-items-center">
                         <div id="picture">
-                            <img id="photoPreview" src="{{ Storage::disk('public')->exists($application->logo) ? asset('storage/'.$application->logo) : asset('AdminLTE-3.2.0/dist/img/AdminLTELogo.png') }}">
+                            <img id="photoPreview" src="{{ Storage::disk('public')->exists($application->logo ? $application->logo : 'logo.jpg') ? asset('storage/'.$application->logo) : asset('AdminLTE-3.2.0/dist/img/AdminLTELogo.png') }}">
                         </div>
                         <div class="media-body ml-4" id="mediabtn">
                             <label class="btn btn-outline-primary" id="filebutton">
