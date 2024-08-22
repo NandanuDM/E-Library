@@ -60,10 +60,20 @@
                         <div class="form-group">
                             <label class="form-label">Nama</label>
                             <input type="text" id="name" name="name" class="form-control mb-1" value="" maxlength="255" onkeypress="return isLetter(event)" required="" oninvalid="this.setCustomValidity('Nama wajib diisi!')" oninput="setCustomValidity('')">
+                            @if ($errors->has('name'))
+                                    <div class="text-danger">
+                                        {{ $errors->first('name') }}
+                                    </div>
+                                    @endif
                         </div>
                         <div class="form-group">
                             <label class="form-label">Email</label>
                             <input type="email" id="email" name="email" class="form-control" value="" required oninvalid="if (this.value == ''){this.setCustomValidity('Email wajib diisi!')} if (this.value != ''){this.setCustomValidity('Format email tidak valid!')}" oninput="setCustomValidity('')">
+                            @if ($errors->has('email'))
+                                    <div class="text-danger">
+                                        {{ $errors->first('email') }}
+                                    </div>
+                                    @endif
                         </div>
                         <div class="form-group">
                             <label class="form-label">Role</label>

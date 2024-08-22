@@ -22,8 +22,9 @@ class UpdatePublisherRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('publisher');
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('publishers')->withoutTrashed()],
+            'name' => ['required', 'string', 'max:255', Rule::unique('publishers')->ignore($id, 'id')->withoutTrashed()],
         ];
     }
 

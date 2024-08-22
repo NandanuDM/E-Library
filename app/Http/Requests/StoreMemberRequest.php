@@ -28,7 +28,8 @@ class StoreMemberRequest extends FormRequest
             'address' => 'required|string|max:255',
             // 'phone' => 'required|string|max:15|unique:members,phone',
             'phone' => ['required', 'max:15', Rule::unique('members')->withoutTrashed()],
-            'email' => 'required|string|email|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('members')->withoutTrashed()],
+            // 'email' => 'required|string|email|max:255',
             'type' => 'required',
         ];
     }
@@ -56,6 +57,7 @@ class StoreMemberRequest extends FormRequest
             'phone.max' => 'Telepon maksimal 15 karakter',
             'phone.unique' => 'Nomor telepon sudah terdaftar',
             'email.required' => 'Email wajib diisi',
+            'email.unique' => 'Email sudah terdaftar',
             'email.string' => 'Email harus berupa teks',
             'email.email' => 'Format email tidak valid',
             'email.max' => 'Email maksimal 255 karakter',

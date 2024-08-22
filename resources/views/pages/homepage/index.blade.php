@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - {{ $application->name }}</title>
+  <title>Homepage - {{ $application->name }}</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="{{ asset('homepage/assets/img/favicon.png') }}" rel="icon">
+  <link href="{{ Storage::disk('public')->exists($application->logo ? $application->logo : 'logo.jpg') ? asset('storage/'. $application->logo) : asset('AdminLTE-3.2.0/dist/img/AdminLTELogo.png') }}" rel="icon">
   <link href="{{ asset('homepage/assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Fonts -->
@@ -41,9 +41,9 @@
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="index.blade.php" class="logo d-flex align-items-center me-auto">
+      <a class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-        <img src="{{ Storage::disk('public')->exists($application->logo ? $application->logo : 'logo.jpg') ? asset('storage/'. $application->logo) : asset('homepage/assets/img/logo.png') }}" alt="">
+        <img src="{{ Storage::disk('public')->exists($application->logo ? $application->logo : 'logo.jpg') ? asset('storage/'. $application->logo) : asset('AdminLTE-3.2.0/dist/img/AdminLTELogo.png') }}" alt="">
         <h1 class="sitename">{{ $application->name }}</h1>
       </a>
 
@@ -74,7 +74,7 @@
       <div class="container">
         <div class="row gy-4">
           <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-up">
-            <h2 class="fw-bold">Transformasi Perpustakaan Anda Dengan E-Library: Lebih Mudah, Lebih Pintar.</h2 class="fw-bold">
+            <h2 class="fw-bold">Transformasi Perpustakaan Anda Dengan {{ $application->name }}: Lebih Mudah, Lebih Pintar.</h2 class="fw-bold">
             <p>Gerbang Pengetahuan Tak Terbatas: Temukan, Belajar, Baca.</p>
             <div class="d-flex">
               @guest
@@ -268,13 +268,6 @@
 
     <div class="container copyright text-center mt-4">
       <p>© <span>Copyright</span> <strong class="px-1 sitename">E-Library</strong> <span>All Rights Reserved</span></p>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
     </div>
 
   </footer>

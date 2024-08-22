@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateBookRequest extends FormRequest
 {
@@ -17,7 +18,8 @@ class UpdateBookRequest extends FormRequest
 
         return [
             'title' => 'required|string|max:255',
-            'isbn' => 'required|string|max:20|unique:books,isbn,' . $bookId . ',id,deleted_at,null',
+            // 'isbn' => 'required|string|max:20|unique:books,isbn,' . $bookId . ',id,deleted_at,null',
+            'isbn' => ['required', 'max:20', Rule::unique('books')->ignore($bookId, 'id')->withoutTrashed()],
             'author' => 'required|string|max:255',
             'published_year' => 'required|integer',
             'category_id' => 'required|integer|exists:categories,id',
@@ -40,6 +42,7 @@ class UpdateBookRequest extends FormRequest
             'title.required' => 'Judul wajib diisi',
             'isbn.required' => 'ISBN wajib diisi',
             'isbn.unique' => 'ISBN sudah terdaftar',
+            'isbn.max' => 'ISBN tidak lebih dari 20 karakter',
             'author.required' => 'Penulis wajib diisi',
             'published_year.required' => 'Tahun terbit wajib diisi',
             'published_year.integer' => 'Tahun terbit harus berupa angka',

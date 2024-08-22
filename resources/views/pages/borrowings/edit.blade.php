@@ -77,7 +77,7 @@
                             <div class="col-12 col-lg-6">
                                 <div class="form-group">
                                     <label for="borrow_date">Tanggal Peminjaman</label>
-                                    <input type="date" class="form-control" id="borrow_date" name="borrow_date" value="{{ old('borrow_date', \Carbon\Carbon::parse($borrowing->borrow_date)->format('Y-m-d')) }}" required oninvalid="this.setCustomValidity('Tanggal peminjaman wajib diisi!')" oninput="setCustomValidity('')">
+                                    <input type="date" class="form-control" id="borrow_date" name="borrow_date" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" value="{{ old('borrow_date', \Carbon\Carbon::parse($borrowing->borrow_date)->format('Y-m-d')) }}" required oninvalid="this.setCustomValidity('Tanggal peminjaman wajib diisi!')" oninput="setCustomValidity('')">
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6">
